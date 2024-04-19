@@ -1,6 +1,6 @@
 # remembrall
 
-A new Flutter project.
+Welcome to Remembrall, your innovative Flutter project aimed at transforming ADHD management. This project serves as your entry point into developing a powerful Flutter application tailored to support individuals dealing with Attention Deficit Hyperactivity Disorder (ADHD).
 
 ## Getting Started
 
