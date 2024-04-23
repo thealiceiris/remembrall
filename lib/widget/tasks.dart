@@ -1,0 +1,78 @@
+// import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+// import 'package:flutter/widgets.dart';
+import 'package:remembrall/models/task.dart';
+
+// ignore: use_key_in_widget_constructors
+class Tasks extends StatelessWidget {
+  final taskList = Task.getTasks();
+
+  @override
+  Widget build(BuildContext context) {
+    // ignore: avoid_unnecessary_containers
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10),
+          itemCount: taskList.length,
+          itemBuilder: (context, index) => taskList[index].isLast
+              ? _buildAddtask()
+              : _buildTask(context, taskList[index])),
+    );
+  }
+
+  Widget _buildAddtask() {
+    return const Text('Add Task');
+  }
+
+  Widget _buildTask(BuildContext context, Task task) {
+    return Container(
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: task.bgcolor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            task.iconData,
+            color: task.iconColor!,
+            size: 25,
+          ),
+          const SizedBox(height: 30),
+          Text(
+            task.title!,
+            style: const TextStyle(
+                color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              _buildTaskStatus(
+                  task.iconColor!, task.btnColor!, '${task.left}left'),
+              const SizedBox(width: 5),
+              _buildTaskStatus(
+                  Colors.white, task.iconColor!, '${task.left}left'),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTaskStatus(Color bgColor, Color textColor, String text, ) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(color: textColor),
+      ),
+    );
+  }
+}
