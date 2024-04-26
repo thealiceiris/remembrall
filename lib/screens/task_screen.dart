@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:remembrall/widget/remembrall.dart';
 import 'package:remembrall/widget/tasks.dart';
-// import 'package:flutter/widgets.dart';
-// import 'package:remembrall/widget/custom_scaffold.dart';
+import 'package:remembrall/screens/rembot_screen.dart';
 
 class TaskScreen extends StatelessWidget {
-  const TaskScreen({super.key});
+  const TaskScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +31,7 @@ class TaskScreen extends StatelessWidget {
           )
         ],
       ),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
 
@@ -46,9 +46,10 @@ class TaskScreen extends StatelessWidget {
             Text(
               'Hi there!',
               style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+                color: Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -60,4 +61,66 @@ class TaskScreen extends StatelessWidget {
           )
         ],
       );
+
+  Widget _buildBottomNavigationBar(BuildContext context) {
+    return Builder(
+      builder: (BuildContext context) {
+        return Container(
+          height: 100,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30.0),
+              topRight: Radius.circular(30.0),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromARGB(62, 158, 158, 158),
+                spreadRadius: 5,
+                blurRadius: 10,
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30.0),
+              topRight: Radius.circular(30.0),
+            ),
+            child: BottomNavigationBar(
+              items: const [
+                BottomNavigationBarItem(
+                  label: 'Home',
+                  icon: Icon(
+                    Icons.home_rounded,
+                    size: 25,
+                  ),
+                ),
+                BottomNavigationBarItem(
+                  label: 'RemBot',
+                  icon: Icon(
+                    Icons.chat_rounded,
+                    size: 25,
+                  ),
+                ),
+                BottomNavigationBarItem(
+                  label: 'Profile',
+                  icon: Icon(
+                    Icons.person_rounded,
+                    size: 25,
+                  ),
+                ),
+              ],
+              onTap: (index) {
+                if (index == 1) { // Check if RemBot item is tapped (index 1)
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RemBotScreen()),
+                  );
+                }
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

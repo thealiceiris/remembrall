@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter/widgets.dart';
 import 'package:remembrall/models/task.dart';
+import 'package:dotted_border/dotted_border.dart';
 
 // ignore: use_key_in_widget_constructors
 class Tasks extends StatelessWidget {
@@ -23,7 +24,19 @@ class Tasks extends StatelessWidget {
   }
 
   Widget _buildAddtask() {
-    return const Text('Add Task');
+    return DottedBorder(
+      borderType: BorderType.RRect,
+      radius: const Radius.circular(20),
+      dashPattern: const [10, 10],
+      color: Colors.grey,
+      child: const Center(
+        child: Text(
+          '+ Add Task',
+          style: TextStyle(
+              color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
   }
 
   Widget _buildTask(BuildContext context, Task task) {
@@ -51,7 +64,7 @@ class Tasks extends StatelessWidget {
           Row(
             children: [
               _buildTaskStatus(
-                  task.iconColor!, task.btnColor!, '${task.left}left'),
+                  task.iconColor!, task.textColor!, '${task.left}left'),
               const SizedBox(width: 5),
               _buildTaskStatus(
                   Colors.white, task.iconColor!, '${task.left}left'),
@@ -62,7 +75,11 @@ class Tasks extends StatelessWidget {
     );
   }
 
-  Widget _buildTaskStatus(Color bgColor, Color textColor, String text, ) {
+  Widget _buildTaskStatus(
+    Color bgColor,
+    Color textColor,
+    String text,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
