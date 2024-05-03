@@ -3,7 +3,6 @@ import 'package:remembrall/screens/task_screen.dart';
 import 'package:remembrall/widget/custom_scaffold.dart';
 import 'package:remembrall/themes/theme.dart';
 
-
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -30,7 +29,7 @@ class _SignupScreenState extends State<SignUpScreen> {
               flex: 6,
               child: Container(
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 255, 255, 255),
+                  color: Color.fromARGB(173, 255, 255, 255),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(40.0),
                     topRight: Radius.circular(40.0),
@@ -190,10 +189,11 @@ class _SignupScreenState extends State<SignUpScreen> {
                             onPressed: () {
                               if (_formSignInKey.currentState!.validate() &&
                                   rememberPassword) {
-                                    Navigator.push(
-                                      context,
-                                        MaterialPageRoute(builder: (context) => const TaskScreen()),
-                                        );
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const TaskScreen()),
+                                );
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text('Processing Data'),

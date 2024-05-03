@@ -6,6 +6,7 @@ import 'package:remembrall/widget/custom_scaffold.dart';
 import 'package:remembrall/widget/welcome_button.dart';
 
 class SplashScreen extends StatelessWidget {
+  // ignore: use_super_parameters
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
@@ -26,7 +27,7 @@ class SplashScreen extends StatelessWidget {
                   text: const TextSpan(
                     children: [
                       TextSpan(
-                        text: 'Welcome Back!\n',
+                        text: 'Welcome!\n',
                         style: TextStyle(
                             fontSize: 45.0,
                             fontWeight: FontWeight.w600,
@@ -41,9 +42,12 @@ class SplashScreen extends StatelessWidget {
                       ),
                       TextSpan(
                         text: 'Get started with Remembrall',
-                        style: TextStyle(fontSize: 20.0,
-                        fontFamily: 'Poppins',
-                         shadows: [
+                        style: TextStyle(
+                            fontSize: 20.0,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w600,
+                            color: Color.fromARGB(255, 249, 247, 247),
+                            shadows: [
                               Shadow(
                                 color: Color.fromARGB(167, 161, 159, 159),
                                 offset: Offset(0, 1.5),

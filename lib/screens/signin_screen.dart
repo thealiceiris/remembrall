@@ -5,8 +5,9 @@ import 'package:remembrall/themes/theme.dart';
 import 'package:remembrall/widget/custom_scaffold.dart';
 
 class SigninScreen extends StatefulWidget {
+  // ignore: use_super_parameters
   const SigninScreen({Key? key}) : super(key: key);
-                                                                                                                                                                                                                                                                                                                                                     
+
   @override
   State<SigninScreen> createState() => _SigninScreenState();
 }
@@ -23,14 +24,14 @@ class _SigninScreenState extends State<SigninScreen> {
           const Expanded(
             flex: 1,
             child: SizedBox(
-              height: 10,
+              height: 20,
             ),
           ),
           Expanded(
             flex: 7,
             child: Container(
               decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 255, 255, 255),
+                color: Color.fromARGB(136, 255, 255, 255),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(40.0),
                   topRight: Radius.circular(40.0),

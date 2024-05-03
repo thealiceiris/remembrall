@@ -1,75 +1,102 @@
 import 'package:flutter/material.dart';
+// ignore: unused_import
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RemBotScreen extends StatefulWidget {
+  // ignore: use_super_parameters
   const RemBotScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _RemBotScreenState createState() => _RemBotScreenState();
 }
 
 class _RemBotScreenState extends State<RemBotScreen> {
   final List<String> messages = [];
-
   final TextEditingController messageController = TextEditingController();
 
-  void _sendMessage(String message) {
+  Future<void> makeApiRequest(String message) async {
+    final response = await http.post(
+      Uri.parse('http://localhost:5000/ask'), // Replace with your endpoint
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'question': message}),
+    );
+
+    // Handle response from API
     setState(() {
-      messages.add(message);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        // console.log(data);
+        messages.add(data['response']); // Add bot message to list
+      } else {
+        messages.add('Error: ${response.statusCode}'); // Handle error
+      }
     });
-    // ... your existing logic to handle the message
-    messageController.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(0, 51, 33, 33), // Make background transparent
       appBar: AppBar(
         title: const Text(
           'RemBot',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.teal, // Set app bar color
+        backgroundColor: const Color(0xFFD7BDE2), // Pastel purple color
       ),
       body: Container(
-        padding: const EdgeInsets.all(16.0), // Add padding to content area
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const Text(
-              'Hi there! I\'m RemBot, your ADHD educational chatbot.',
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            Expanded(
+              child: ListView.builder(
+                reverse: true, // Display messages from newest to oldest
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  return _buildMessage(messages[index],
+                      isUserMessage: index.isOdd);
+                },
+              ),
             ),
-            const SizedBox(height: 8.0), // Add spacing between welcome and input
+            const SizedBox(height: 8.0), // Add spacing between list and input
             Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: messageController,
                     decoration: InputDecoration(
-                      hintText: 'Ask me about ADHD...', // Suggest asking about ADHD
+                      hintText: 'Ask me about ADHD...',
+                      hintStyle: TextStyle(color: Colors.grey[400]),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0), // Rounded corners
+                        borderRadius: BorderRadius.circular(24.0),
                       ),
+                      filled: true,
+                      fillColor: Colors.white,
                     ),
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.send, color: Colors.teal), // Color the send icon
+                const SizedBox(width: 8.0),
+                ElevatedButton(
                   onPressed: () {
                     if (messageController.text.isNotEmpty) {
-                      _sendMessage(messageController.text);
+                      setState(() {
+                        messages.add(messageController.text);
+                        messageController.clear();
+                        makeApiRequest(messageController.text);
+                      });
                     }
                   },
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(16.0),
+                    backgroundColor:
+                        const Color(0xFFD7BDE2), // Pastel purple color
+                  ),
+                  child: const Icon(Icons.send),
                 ),
               ],
-            ),
-            const SizedBox(height: 8.0), // Add spacing between input and list
-            Expanded(
-              child: ListView.builder(
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  return _buildMessage(messages[index], isUserMessage: index % 2 == 1);
-                },
-              ),
             ),
           ],
         ),
@@ -84,10 +111,18 @@ class _RemBotScreenState extends State<RemBotScreen> {
         padding: const EdgeInsets.all(12.0),
         margin: const EdgeInsets.symmetric(vertical: 4.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          color: isUserMessage ? Colors.teal.shade100 : Colors.grey.shade200,
+          borderRadius: BorderRadius.circular(12.0),
+          color: isUserMessage
+              ? const Color(0xFFD7BDE2)
+                  .withOpacity(0.8) // Pastel purple color with opacity
+              : Colors.grey.shade200,
         ),
-        child: Text(message),
+        child: Text(
+          message,
+          style: TextStyle(
+            color: isUserMessage ? Colors.white : Colors.black,
+          ),
+        ),
       ),
     );
   }

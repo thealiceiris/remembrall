@@ -81,7 +81,7 @@ class TaskScreen extends StatelessWidget {
             ],
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(30.0),
               topRight: Radius.circular(30.0),
             ),
@@ -113,7 +113,7 @@ class TaskScreen extends StatelessWidget {
                 if (index == 1) { // Check if RemBot item is tapped (index 1)
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => RemBotScreen()),
+                    MaterialPageRoute(builder: (context) => const RemBotScreen()),
                   );
                 }
               },
