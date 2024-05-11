@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:remembrall/screens/task_screen.dart';
 import 'package:remembrall/widget/custom_scaffold.dart';
 import 'package:remembrall/themes/theme.dart';

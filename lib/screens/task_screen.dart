@@ -1,4 +1,6 @@
 // File: task_screen.dart
+// ignore_for_file: use_super_parameters
+
 import 'package:flutter/material.dart';
 import 'package:remembrall/widget/remembrall.dart';
 import 'package:remembrall/widget/tasks.dart';
@@ -45,6 +47,7 @@ class TaskScreen extends StatelessWidget {
   }
 
   AppBar _buildAppBar() => AppBar(
+    automaticallyImplyLeading: false,
     backgroundColor: Colors.white,
     elevation: 0,
     title: const Text(
