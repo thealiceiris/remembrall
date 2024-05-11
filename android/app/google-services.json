@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "461756257493",
+    "project_id": "capstonebackend-9c199",
+    "storage_bucket": "capstonebackend-9c199.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461756257493:android:f96ee22573897cab1a3e5c",
+        "android_client_info": {
+          "package_name": "com.example.remembrall"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFcLttWS72Mx8z5M-xCIoi4CHoWjov4zk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461756257493:android:7c84f43138a410461a3e5c",
+        "android_client_info": {
+          "package_name": "remembrall.seventeenth09.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFcLttWS72Mx8z5M-xCIoi4CHoWjov4zk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
