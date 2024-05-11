@@ -11,6 +11,8 @@ class Task {
       btntxtColor; // Added textColor property
   bool isLast;
   num? progress, left, done;
+  List<Map<String, dynamic>>? desc;
+ 
 
   Task({
     this.iconData,
@@ -24,6 +26,8 @@ class Task {
     this.progress,
     this.left,
     this.done,
+    this.desc
+   
   });
 
   get tasks => null;
@@ -42,6 +46,7 @@ class Task {
         progress: 0.5,
         left: 0,
         done: 0,
+
       ),
       Task(
         iconData: Icons.book_rounded,

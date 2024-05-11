@@ -1,7 +1,9 @@
+// File: task_screen.dart
 import 'package:flutter/material.dart';
 import 'package:remembrall/widget/remembrall.dart';
 import 'package:remembrall/widget/tasks.dart';
 import 'package:remembrall/screens/rembot_screen.dart';
+import 'package:remembrall/screens/streak.dart'; // Make sure this path matches where you save the streak_widget.dart
 
 class TaskScreen extends StatelessWidget {
   const TaskScreen({Key? key}) : super(key: key);
@@ -15,6 +17,13 @@ class TaskScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Remembrall(),
+          const Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: EdgeInsets.only(right: 20, top: 20),
+              child: StreakWidget(initialStreak: 5), // Pass the initial streak dynamically if needed
+            ),
+          ),
           Container(
             padding: const EdgeInsets.all(15),
             child: const Text(
@@ -27,8 +36,8 @@ class TaskScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Tasks(),
-          )
+            child: Tasks(), // Assuming this widget handles the task list
+          ),
         ],
       ),
       bottomNavigationBar: _buildBottomNavigationBar(context),
@@ -36,91 +45,39 @@ class TaskScreen extends StatelessWidget {
   }
 
   AppBar _buildAppBar() => AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: const Row(
-          children: [
-            SizedBox(
-              width: 40,
-            ),
-            Text(
-              'Hi there!',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        actions: const [
-          Icon(
-            Icons.more_vert,
-            color: Colors.black,
-            size: 40,
-          )
-        ],
-      );
+    backgroundColor: Colors.white,
+    elevation: 0,
+    title: const Text(
+      'Hi there!',
+      style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+    ),
+    actions: const [
+      Icon(Icons.more_vert, color: Colors.black, size: 24),
+    ],
+  );
 
-  Widget _buildBottomNavigationBar(BuildContext context) {
-    return Builder(
-      builder: (BuildContext context) {
-        return Container(
-          height: 100,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromARGB(62, 158, 158, 158),
-                spreadRadius: 5,
-                blurRadius: 10,
-              ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0),
-            ),
-            child: BottomNavigationBar(
-              items: const [
-                BottomNavigationBarItem(
-                  label: 'Home',
-                  icon: Icon(
-                    Icons.home_rounded,
-                    size: 25,
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  label: 'RemBot',
-                  icon: Icon(
-                    Icons.chat_rounded,
-                    size: 25,
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  label: 'Profile',
-                  icon: Icon(
-                    Icons.person_rounded,
-                    size: 25,
-                  ),
-                ),
-              ],
-              onTap: (index) {
-                if (index == 1) { // Check if RemBot item is tapped (index 1)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const RemBotScreen()),
-                  );
-                }
-              },
-            ),
-          ),
+  Widget _buildBottomNavigationBar(BuildContext context) => BottomNavigationBar(
+    items: const [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.home),
+        label: 'Home',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.chat),
+        label: 'RemBot',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.person),
+        label: 'Profile',
+      ),
+    ],
+    onTap: (index) {
+      if (index == 1) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const RemBotScreen()),
         );
-      },
-    );
-  }
+      }
+    },
+  );
 }

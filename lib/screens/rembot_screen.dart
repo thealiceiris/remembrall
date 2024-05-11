@@ -18,7 +18,7 @@ class _RemBotScreenState extends State<RemBotScreen> {
 
   Future<void> makeApiRequest(String message) async {
     final response = await http.post(
-      Uri.parse('http://localhost:5000/ask'), // Replace with your endpoint
+      Uri.parse('http://127.0.0.1:5000'), 
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'question': message}),
     );
@@ -67,7 +67,7 @@ class _RemBotScreenState extends State<RemBotScreen> {
                   child: TextField(
                     controller: messageController,
                     decoration: InputDecoration(
-                      hintText: 'Ask me about ADHD...',
+                      hintText: 'Ask a question about ADHD...',
                       hintStyle: TextStyle(color: Colors.grey[400]),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24.0),
