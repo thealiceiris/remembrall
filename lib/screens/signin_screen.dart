@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:remembrall/screens/signup_screen.dart';
@@ -6,7 +8,6 @@ import 'package:remembrall/themes/theme.dart';
 import 'package:remembrall/widget/custom_scaffold.dart';
 
 class SigninScreen extends StatefulWidget {
-  // ignore: use_super_parameters
   const SigninScreen({Key? key}) : super(key: key);
 
   @override
@@ -15,7 +16,12 @@ class SigninScreen extends StatefulWidget {
 
 class _SigninScreenState extends State<SigninScreen> {
   final _formSignInKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   bool rememberPassword = true;
+
+  // Firebase Auth instance
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +64,7 @@ class _SigninScreenState extends State<SigninScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
+                          controller: emailController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter Email';
@@ -91,8 +98,8 @@ class _SigninScreenState extends State<SigninScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
+                          controller: passwordController,
                           obscureText: true,
-                          obscuringCharacter: '*',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter Password';
@@ -162,20 +169,35 @@ class _SigninScreenState extends State<SigninScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (_formSignInKey.currentState!.validate() &&
                                 rememberPassword) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const TaskScreen(),
-                                ),
-                              );
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Processing Data'),
-                                ),
-                              );
+                              try {
+                                // Sign in user with email and password
+                                await _auth.signInWithEmailAndPassword(
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                );
+                                // Navigate to TaskScreen upon successful sign-in
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const TaskScreen()),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Processing Data'),
+                                  ),
+                                );
+                              } catch (e) {
+                                // Handle sign-in errors
+                                print('Error signing in: $e');
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Error signing in. Please try again.'),
+                                  ),
+                                );
+                              }
                             } else if (!rememberPassword) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
