@@ -181,12 +181,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               } catch (e) {
                                 // Handle sign-up errors
                                 print('Error creating user: $e');
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                        'Error signing up. Please try again.'),
-                                  ),
-                                );
+                               if (mounted) {
+                                 ScaffoldMessenger.of(context).showSnackBar(
+                                   const SnackBar(
+                                     content: Text('Processing Data'),
+                                   ),
+                                 );
+                               }
                               }
                             } else if (!rememberPassword) {
                               ScaffoldMessenger.of(context).showSnackBar(

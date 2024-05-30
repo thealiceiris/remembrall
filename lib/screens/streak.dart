@@ -45,7 +45,7 @@ class _StreakWidgetState extends State<StreakWidget> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.local_fire_department, color: Colors.red),
+          const Icon(Icons.local_fire_department, color: Color.fromARGB(255, 245, 25, 9)),
           const SizedBox(width: 10),
           Text(
             'Streak: $currentStreak days',

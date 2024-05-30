@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:remembrall/models/task.dart';
 
 class AddTaskPage extends StatefulWidget {
-  final Function(String title, DateTime dateTime) onAddTask; // Callback to pass new task data
+  final Function(Task task) onAddTask;
 
   const AddTaskPage({super.key, required this.onAddTask});
 
@@ -12,12 +13,21 @@ class AddTaskPage extends StatefulWidget {
 class _AddTaskPageState extends State<AddTaskPage> {
   String newTaskTitle = '';
   DateTime? newTaskDateTime;
+  bool addReminder = false;
 
   void _handleAddTask() {
-    // Validate user input (optional)
     if (newTaskTitle.isNotEmpty && newTaskDateTime != null) {
-      widget.onAddTask(newTaskTitle, newTaskDateTime!); // Call callback with task data
-      Navigator.pop(context); // Close the AddTaskPage
+      final newTask = Task(
+        title: newTaskTitle,
+        dateTime: newTaskDateTime,
+        reminder: addReminder,
+        left: 1,
+        done: 0,
+        progress: 0,
+      );
+
+      widget.onAddTask(newTask);
+      Navigator.pop(context, newTask);
     }
   }
 
@@ -28,7 +38,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         title: const Text('Add Task'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0), // Add some padding
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
@@ -42,27 +52,46 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 const SizedBox(width: 10.0),
                 TextButton(
                   onPressed: () async {
-                    // Show DateTimePicker to select time
                     TimeOfDay? pickedTime = await showTimePicker(
                       context: context,
                       initialTime: TimeOfDay.now(),
-                    ); // Use showTimePicker for time selection
+                    );
                     if (pickedTime != null) {
-                      setState(() => newTaskDateTime = DateTime(
+                      setState(() {
+                        newTaskDateTime = DateTime(
                           DateTime.now().year,
                           DateTime.now().month,
                           DateTime.now().day,
                           pickedTime.hour,
-                          pickedTime.minute));
+                          pickedTime.minute,
+                        );
+                      });
                     }
                   },
                   child: Text(
-                    newTaskDateTime?.toString() ?? 'Select Time',
+                    newTaskDateTime != null
+                        ? "${newTaskDateTime!.hour}:${newTaskDateTime!.minute}"
+                        : 'Select Time',
                     style: TextStyle(
-                      color: newTaskDateTime != null ? Colors.black : Colors.grey,
+                      color:
+                          newTaskDateTime != null ? Colors.black : Colors.grey,
                     ),
                   ),
                 ),
+              ],
+            ),
+            const SizedBox(height: 10.0),
+            Row(
+              children: [
+                Checkbox(
+                  value: addReminder,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      addReminder = value ?? false;
+                    });
+                  },
+                ),
+                const Text('Add Reminder'),
               ],
             ),
             const SizedBox(height: 10.0),

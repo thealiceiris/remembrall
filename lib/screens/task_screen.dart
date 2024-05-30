@@ -23,13 +23,15 @@ class TaskScreen extends StatelessWidget {
             alignment: Alignment.topRight,
             child: Padding(
               padding: EdgeInsets.only(right: 20, top: 20),
-              child: StreakWidget(initialStreak: 5), // Pass the initial streak dynamically if needed
+              child: StreakWidget(
+                  initialStreak:
+                      0), // Pass the initial streak dynamically if needed
             ),
           ),
           Container(
             padding: const EdgeInsets.all(15),
             child: const Text(
-              'Tasks',
+              'Tasks Categories',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -47,40 +49,41 @@ class TaskScreen extends StatelessWidget {
   }
 
   AppBar _buildAppBar() => AppBar(
-    automaticallyImplyLeading: false,
-    backgroundColor: Colors.white,
-    elevation: 0,
-    title: const Text(
-      'Hi there!',
-      style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-    ),
-    actions: const [
-      Icon(Icons.more_vert, color: Colors.black, size: 24),
-    ],
-  );
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const Text(
+          'Hi there!',
+          style: TextStyle(
+              color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        actions: const [
+          Icon(Icons.more_vert, color: Colors.black, size: 24),
+        ],
+      );
 
   Widget _buildBottomNavigationBar(BuildContext context) => BottomNavigationBar(
-    items: const [
-      BottomNavigationBarItem(
-        icon: Icon(Icons.home),
-        label: 'Home',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.chat),
-        label: 'RemBot',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.person),
-        label: 'Profile',
-      ),
-    ],
-    onTap: (index) {
-      if (index == 1) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const RemBotScreen()),
-        );
-      }
-    },
-  );
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            label: 'RemBot',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        onTap: (index) {
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const RemBotScreen()),
+            );
+          }
+        },
+      );
 }

@@ -4,31 +4,32 @@ import 'package:flutter/material.dart';
 class Task {
   IconData? iconData;
   String? title;
+  DateTime? dateTime;
   Color? bgcolor,
       iconColor,
       btnColor,
       textColor,
       btntxtColor; // Added textColor property
   bool isLast;
+  bool reminder;
   num? progress, left, done;
   List<Map<String, dynamic>>? desc;
- 
 
-  Task({
-    this.iconData,
-    this.title,
-    this.bgcolor,
-    this.iconColor,
-    this.btnColor,
-    this.btntxtColor,
-    this.textColor, // Added textColor parameter
-    this.isLast = false,
-    this.progress,
-    this.left,
-    this.done,
-    this.desc
-   
-  });
+  Task(
+      {this.iconData,
+      this.title,
+      this.dateTime,
+      this.bgcolor,
+      this.iconColor,
+      this.btnColor,
+      this.btntxtColor,
+      this.textColor, // Added textColor parameter
+      this.isLast = false,
+      this.reminder=false,
+      this.progress,
+      this.left,
+      this.done,
+      this.desc});
 
   get tasks => null;
 
@@ -46,7 +47,6 @@ class Task {
         progress: 0.5,
         left: 0,
         done: 0,
-
       ),
       Task(
         iconData: Icons.book_rounded,

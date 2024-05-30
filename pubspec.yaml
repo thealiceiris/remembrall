@@ -45,6 +45,10 @@ dependencies:
   firebase_core: ^2.31.0
   firebase_auth: ^4.19.5
   cloud_firestore: ^4.17.3
+  icons_launcher: ^2.1.7
+  flutter_launcher_icons: ^0.13.1
+  flutter_local_notifications: ^17.1.2
+  timezone: ^0.9.3
   
 
 dev_dependencies:
@@ -62,7 +66,6 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
-
 flutter:
 
   # The following line ensures that the Material Icons font is
@@ -70,9 +73,14 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"
+
   # To add assets to your application, add an assets section, like this:
   assets:
-    - ./assets/images/
+    - .assets/images/
     
     # - images/a_dot_ham.jpeg
 
