@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class RemBotScreen extends StatefulWidget {
   const RemBotScreen({super.key});
@@ -10,7 +13,27 @@ class RemBotScreen extends StatefulWidget {
 class _RemBotScreenState extends State<RemBotScreen> {
   final List<String> messages = [];
   final TextEditingController messageController = TextEditingController();
+Future<void> sendMessage(String message) async {
+    final url = Uri.parse('http://127.0.0.1:5000/ask'); // Adjust the URL as needed
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'question': message}),
+    );
 
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      setState(() {
+        messages.add(message);
+        messages.add(data['response']);
+      });
+    } else {
+      setState(() {
+        messages.add(message);
+        messages.add("Error: Unable to get response from server.");
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

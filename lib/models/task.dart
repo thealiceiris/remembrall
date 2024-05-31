@@ -11,6 +11,7 @@ class Task {
       textColor,
       btntxtColor; // Added textColor property
   bool isLast;
+  bool isCompleted;
   bool reminder;
   num? progress, left, done;
   List<Map<String, dynamic>>? desc;
@@ -25,9 +26,10 @@ class Task {
       this.btntxtColor,
       this.textColor, // Added textColor parameter
       this.isLast = false,
-      this.reminder=false,
+      this.reminder = false,
       this.progress,
       this.left,
+      this.isCompleted = false,
       this.done,
       this.desc});
 

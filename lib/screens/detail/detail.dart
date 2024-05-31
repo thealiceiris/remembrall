@@ -4,6 +4,7 @@ import 'package:remembrall/screens/task_page.dart';
 import 'package:remembrall/screens/detail/widgets/tasktitle.dart';
 import 'package:remembrall/screens/rembot_screen.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
 class DetailPage extends StatefulWidget {
   final Task task;
@@ -119,52 +120,65 @@ class _DetailPageState extends State<DetailPage> {
           )
         else
           Expanded(
-            child: ListView.builder(
+            child: ListView.separated(
               itemCount: tasks.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 10),
               itemBuilder: (context, index) {
                 final task = tasks[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: ListTile(
-                      title: Text(task.title ?? '',
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
-                      subtitle: Text(task.dateTime?.toString() ?? '',
-                          style: const TextStyle(color: Colors.grey)),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.blue),
-                            onPressed: () {
-                              // Implement task update
-                            },
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: () => _deleteTask(index),
-                          ),
-                          IconButton(
-                            icon:
-                                const Icon(Icons.cancel, color: Colors.orange),
-                            onPressed: () => _cancelTask(index),
+                return TimelineTile(
+                  isFirst: index == 0,
+                  isLast: index == tasks.length - 1,
+                  alignment: TimelineAlign.manual,
+                  lineXY:
+                      0.1, // Adjust this value to control the horizontal position of the line
+                  endChild: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
                           ),
                         ],
+                      ),
+                      child: ListTile(
+                        title: Text(
+                          task.title ?? '',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        subtitle: Text(
+                          task.dateTime?.toString() ?? '',
+                          style: const TextStyle(color: Colors.grey),
+                        ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit, color: Colors.blue),
+                              onPressed: () {
+                                // Implement task update
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () => _deleteTask(index),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.cancel,
+                                  color: Colors.orange),
+                              onPressed: () => _cancelTask(index),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
