@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:remembrall/models/task.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
 class AddTaskPage extends StatefulWidget {
   final Function(Task task) onAddTask;
@@ -27,8 +28,30 @@ class _AddTaskPageState extends State<AddTaskPage> {
       );
 
       widget.onAddTask(newTask);
+
+      if (addReminder) {
+        _scheduleNotification(newTask);
+      }
+
       Navigator.pop(context, newTask);
     }
+  }
+
+  void _scheduleNotification(Task task) {
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: task.dateTime!.millisecondsSinceEpoch.remainder(100000),
+        channelKey: 'basic_channel',
+        title: 'Reminder for ${task.title}',
+        body: 'Your task "${task.title}" is scheduled for now.',
+        notificationLayout: NotificationLayout.Default,
+      ),
+      schedule: NotificationCalendar.fromDate(
+        date: task.dateTime!,
+        preciseAlarm: true,
+        allowWhileIdle: true,
+      ),
+    );
   }
 
   @override
@@ -105,3 +128,4 @@ class _AddTaskPageState extends State<AddTaskPage> {
     );
   }
 }
+    

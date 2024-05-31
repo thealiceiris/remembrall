@@ -8,8 +8,6 @@ const lightColorScheme = ColorScheme(
     onSecondary: Colors.white,
     error: Color.fromARGB(255, 6, 0, 3),
     onError: Colors.white,
-    background: Color.fromARGB(255, 209, 196, 234),
-    onBackground: Colors.black87,
     surface: Color.fromARGB(255, 229, 221, 239),
     onSurface: Colors.black87);
 
@@ -20,8 +18,6 @@ const darkColorScheme = ColorScheme.dark(
     onSecondary: Colors.white,
     error: Color.fromARGB(255, 11, 0, 6),
     onError: Colors.white,
-    background: Color.fromARGB(255, 209, 196, 234),
-    onBackground: Colors.black87,
     surface: Color.fromARGB(255, 229, 221, 239),
     onSurface: Colors.black87);
 
@@ -32,13 +28,13 @@ ThemeData lightMode = ThemeData(
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
       backgroundColor:
-          MaterialStateProperty.all<Color>(lightColorScheme.primary),
+          WidgetStateProperty.all<Color>(lightColorScheme.primary),
       foregroundColor:
-          MaterialStateProperty.all<Color>(lightColorScheme.onPrimary),
-   elevation: MaterialStateProperty.all<double>(5.0), // shadow
-      padding: MaterialStateProperty.all<EdgeInsets>(
+          WidgetStateProperty.all<Color>(lightColorScheme.onPrimary),
+   elevation: WidgetStateProperty.all<double>(5.0), // shadow
+      padding: WidgetStateProperty.all<EdgeInsets>(
           const EdgeInsets.symmetric(horizontal: 20, vertical: 18)),
-      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16), // Adjust as needed
         ),

@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-// ignore: unused_import
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class RemBotScreen extends StatefulWidget {
-  // ignore: use_super_parameters
-  const RemBotScreen({Key? key}) : super(key: key);
+  const RemBotScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _RemBotScreenState createState() => _RemBotScreenState();
 }
 
@@ -16,29 +11,11 @@ class _RemBotScreenState extends State<RemBotScreen> {
   final List<String> messages = [];
   final TextEditingController messageController = TextEditingController();
 
-  Future<void> makeApiRequest(String message) async {
-    final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000'), 
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'question': message}),
-    );
-
-    // Handle response from API
-    setState(() {
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        // console.log(data);
-        messages.add(data['response']); // Add bot message to list
-      } else {
-        messages.add('Error: ${response.statusCode}'); // Handle error
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(0, 51, 33, 33), // Make background transparent
+      backgroundColor:
+          const Color.fromARGB(0, 51, 33, 33), // Make background transparent
       appBar: AppBar(
         title: const Text(
           'RemBot',
@@ -84,7 +61,8 @@ class _RemBotScreenState extends State<RemBotScreen> {
                       setState(() {
                         messages.add(messageController.text);
                         messageController.clear();
-                        makeApiRequest(messageController.text);
+                        // Simulate a bot response
+                        messages.add("I'm Rembot! How can I help you?");
                       });
                     }
                   },

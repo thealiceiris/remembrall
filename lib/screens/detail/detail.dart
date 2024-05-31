@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:remembrall/models/task.dart';
-import 'package:remembrall/screens/task_page.dart';  // Adjust the import as needed
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
-
-
+import 'package:remembrall/screens/task_page.dart';
+import 'package:remembrall/screens/detail/widgets/tasktitle.dart';
+import 'package:remembrall/screens/rembot_screen.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class DetailPage extends StatefulWidget {
   final Task task;
@@ -17,18 +15,38 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  List<Task> _tasks = [];
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  List<Task> tasks = [];
 
   @override
   void initState() {
     super.initState();
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    const InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    tasks = [widget.task];
+  }
+
+  void _addTask(Task task) {
+    setState(() {
+      tasks.add(task);
+      tasks.sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
+    });
+  }
+
+  void _updateTask(int index, Task updatedTask) {
+    setState(() {
+      tasks[index] = updatedTask;
+      tasks.sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
+    });
+  }
+
+  void _deleteTask(int index) {
+    setState(() {
+      tasks.removeAt(index);
+    });
+  }
+
+  void _cancelTask(int index) {
+    setState(() {
+      tasks[index].done = tasks[index].left;
+    });
   }
 
   @override
@@ -67,39 +85,88 @@ class _DetailPageState extends State<DetailPage> {
   Widget _buildContent() {
     return Column(
       children: [
-        const SizedBox(height: 20),
-        if (_tasks.isEmpty)
+        TableCalendar(
+          firstDay: DateTime.utc(2010, 10, 16),
+          lastDay: DateTime.utc(2030, 3, 14),
+          focusedDay: DateTime.now(),
+          calendarFormat: CalendarFormat.week,
+          selectedDayPredicate: (day) => isSameDay(day, DateTime.now()),
+          onDaySelected: (selectedDay, focusedDay) {
+            // Handle onDaySelected callback here
+          },
+        ),
+        const TaskTitle(),
+        const SizedBox(height: 100),
+        if (tasks.isEmpty)
           const Align(
-            alignment: Alignment.center,
-            child: Text(
-              'No tasks yet',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            alignment: Alignment.bottomCenter,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'No tasks yet',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'Tap "+" to start schedule planning with Me',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
             ),
           )
         else
           Expanded(
             child: ListView.builder(
-              itemCount: _tasks.length,
+              itemCount: tasks.length,
               itemBuilder: (context, index) {
-                final task = _tasks[index];
-                return ListTile(
-                  title: Text(
-                    task.title!,
-                    style: TextStyle(
-                      decoration: task.done == 1 ? TextDecoration.lineThrough : null,
+                final task = tasks[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
                     ),
-                  ),
-                  leading: Checkbox(
-                    value: task.done == 1,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        task.done = value! ? 1 : 0;
-                      });
-                    },
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () => _removeTask(task),
+                    child: ListTile(
+                      title: Text(task.title ?? '',
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold)),
+                      subtitle: Text(task.dateTime?.toString() ?? '',
+                          style: const TextStyle(color: Colors.grey)),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.blue),
+                            onPressed: () {
+                              // Implement task update
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            onPressed: () => _deleteTask(index),
+                          ),
+                          IconButton(
+                            icon:
+                                const Icon(Icons.cancel, color: Colors.orange),
+                            onPressed: () => _cancelTask(index),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 );
               },
@@ -119,15 +186,10 @@ class _DetailPageState extends State<DetailPage> {
             context,
             MaterialPageRoute(
               builder: (context) => AddTaskPage(
-                onAddTask: (task) {
-                  Navigator.pop(context, task);
-                },
+                onAddTask: (task) => _addTask(task),
               ),
             ),
           );
-          if (result != null) {
-            _addTask(result);
-          }
         },
         backgroundColor: const Color(0xFFE6B9F0),
         shape: RoundedRectangleBorder(
@@ -146,50 +208,6 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  Future<void> _addTask(Task newTask) async {
-    setState(() {
-      _tasks.add(newTask);
-      _tasks.sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
-    });
-    if (newTask.reminder) {
-      await _scheduleNotification(newTask);
-    }
-  }
-
-  Future<void> _scheduleNotification(Task task) async {
-    if (task.title == null) return;
-
-  final tz.Location location = tz.getLocation('your_time_zone'); // Replace 'your_time_zone' with the desired time zone
-  final tz.TZDateTime scheduledDate = tz.TZDateTime.from(task.dateTime!, location);
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'your_channel_id',
-      'your_channel_name',
-      channelDescription: 'your_channel_description',
-      importance: Importance.max,
-      priority: Priority.high,
-      showWhen: false,
-    );
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      0,
-      'Task Reminder',
-      task.title,
-      task.dateTime!,
-      platformChannelSpecifics,
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-    );
-  }
-
-  void _removeTask(Task task) {
-    setState(() {
-      _tasks.remove(task);
-    });
-  }
-
   Widget _buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.black,
@@ -206,36 +224,59 @@ class _DetailPageState extends State<DetailPage> {
         Padding(
           padding: EdgeInsets.only(top: 16.0, right: 15.0),
           child: Icon(
-            Icons.more_vert,
+            Icons.more,
             size: 40,
             color: Colors.white,
           ),
         ),
       ],
+      title: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            '${widget.task.title} tasks',
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+          const SizedBox(
+            height: 5.0,
+          ),
+          Text(
+            'You have ${widget.task.left} tasks left today!',
+            style: const TextStyle(fontSize: 18, color: Colors.grey),
+            maxLines: 2,
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildBottomNavigationBar(BuildContext context) {
-    return BottomNavigationBar(
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_today),
-          label: 'Calendar',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.settings),
-          label: 'Settings',
-        ),
-      ],
-      currentIndex: 0,
-      selectedItemColor: Colors.black,
-      onTap: (index) {
-        // Handle bottom navigation tap
-      },
-    );
-  }
+  Widget _buildBottomNavigationBar(BuildContext context) => BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            label: 'RemBot',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        onTap: (index) {
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const RemBotScreen()),
+            );
+          }
+        },
+      );
 }
