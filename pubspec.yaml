@@ -49,12 +49,25 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_local_notifications: ^17.1.2
   timezone: ^0.9.3
+  riverpod: ^2.5.1
+  hooks_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+  flutter_hooks: ^0.20.5
+  riverpod_generator: ^2.4.0
+  flutter_dotenv: ^5.1.0
+  syncfusion_flutter_pdf: ^25.2.6
+  
+  
   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+build_runner:
+custom_lint:
 
+ 
+  
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -80,7 +93,9 @@ flutter_icons:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - .assets/images/
+    - assets/images/
+    - assets/pdfs/
+    - .env
     
     # - images/a_dot_ham.jpeg
 
