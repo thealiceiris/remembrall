@@ -9,7 +9,7 @@ class TaskTitle extends StatelessWidget {
       padding: const EdgeInsets.all(15),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         const Text(
-          'Tasks',
+          'Your Tasks for the day',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,

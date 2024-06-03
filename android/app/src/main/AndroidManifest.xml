@@ -17,8 +17,7 @@
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
+              android:resource="@style/NormalTheme"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -28,17 +27,50 @@
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
             android:name="flutterEmbedding"
-            android:value="2" />
+            android:value="2"/>
+        <!-- Meta-data for Firebase messaging notification icon and color -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/nf_ic"/>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent"/>
+        <!-- Awesome Notifications services and receivers -->
+        <service
+            android:name="me.carda.awesome_notifications.notifications.NotificationService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true"/>
+        <receiver
+            android:name="me.carda.awesome_notifications.notifications.receivers.ActionReceiver"
+            android:exported="true"/>
+        <receiver
+            android:name="me.carda.awesome_notifications.notifications.receivers.DismissedReceiver"
+            android:exported="true"/>
+        <receiver
+            android:name="me.carda.awesome_notifications.notifications.receivers.NotificationReceiver"
+            android:exported="true"/>
+        <receiver
+            android:name="me.carda.awesome_notifications.notifications.receivers.RebootListener"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+            </intent-filter>
+        </receiver>
     </application>
-    <!-- Required to query activities that can process text, see:
-         https://developer.android.com/training/package-visibility?hl=en and
-         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
-
-         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
+    <!-- Required to query activities that can process text -->
     <queries>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
     </queries>
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 </manifest>

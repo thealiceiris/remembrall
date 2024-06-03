@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:remembrall/models/task.dart';
 import 'package:remembrall/screens/task_page.dart';
-import 'package:remembrall/screens/detail/widgets/tasktitle.dart';
 import 'package:remembrall/screens/rembot_screen.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:timeline_tile/timeline_tile.dart';
+import 'package:remembrall/screens/detail/widgets/tasktitle.dart';
 
 class DetailPage extends StatefulWidget {
   final Task task;
 
-  const DetailPage({Key? key, required this.task}) : super(key: key);
+  const DetailPage({super.key, required this.task});
 
   @override
-  _DetailPageState createState() => _DetailPageState();
+  DetailPageState createState() => DetailPageState();
 }
 
-class _DetailPageState extends State<DetailPage> {
+class DetailPageState extends State<DetailPage> {
   List<Task> tasks = [];
 
   @override
@@ -27,14 +26,16 @@ class _DetailPageState extends State<DetailPage> {
   void _addTask(Task task) {
     setState(() {
       tasks.add(task);
-      tasks.sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
+      tasks.sort((a, b) => (a.dateTime ?? DateTime.now())
+          .compareTo(b.dateTime ?? DateTime.now()));
     });
   }
 
   void _updateTask(int index, Task updatedTask) {
     setState(() {
       tasks[index] = updatedTask;
-      tasks.sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
+      tasks.sort((a, b) => (a.dateTime ?? DateTime.now())
+          .compareTo(b.dateTime ?? DateTime.now()));
     });
   }
 
@@ -44,42 +45,52 @@ class _DetailPageState extends State<DetailPage> {
     });
   }
 
-  void _cancelTask(int index) {
+  void _toggleTaskCompletion(int index, bool? value) {
     setState(() {
-      tasks[index].done = tasks[index].left;
+      tasks[index].isfinished = value ?? false;
     });
+  }
+
+  int _getTasksLeft() {
+    return tasks.where((task) => !task.isfinished).length;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _buildAppBar(context),
-          const SizedBox(height: 20),
-          Expanded(
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context, tasks);
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildAppBar(context),
+            const SizedBox(height: 20),
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+                padding: const EdgeInsets.only(top: 10),
+                child: Stack(
+                  children: [
+                    _buildContent(),
+                    _buildFloatingActionButton(context),
+                  ],
                 ),
               ),
-              padding: const EdgeInsets.only(top: 10),
-              child: Stack(
-                children: [
-                  _buildContent(),
-                  _buildFloatingActionButton(context),
-                ],
-              ),
             ),
-          ),
-        ],
+          ],
+        ),
+        bottomNavigationBar: _buildBottomNavigationBar(context),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
 
@@ -97,7 +108,7 @@ class _DetailPageState extends State<DetailPage> {
           },
         ),
         const TaskTitle(),
-        const SizedBox(height: 100),
+        const SizedBox(height: 20),
         if (tasks.isEmpty)
           const Align(
             alignment: Alignment.bottomCenter,
@@ -120,66 +131,62 @@ class _DetailPageState extends State<DetailPage> {
           )
         else
           Expanded(
-            child: ListView.separated(
+            child: ListView.builder(
               itemCount: tasks.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 10),
               itemBuilder: (context, index) {
                 final task = tasks[index];
-                return TimelineTile(
-                  isFirst: index == 0,
-                  isLast: index == tasks.length - 1,
-                  alignment: TimelineAlign.manual,
-                  lineXY:
-                      0.1, // Adjust this value to control the horizontal position of the line
-                  endChild: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  elevation: 5,
+                  child: ListTile(
+                    leading: Checkbox(
+                      value: task.isfinished,
+                      onChanged: (value) => _toggleTaskCompletion(index, value),
+                    ),
+                    title: Text(
+                      task.title ?? '',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        decoration:
+                            task.isfinished ? TextDecoration.lineThrough : null,
                       ),
-                      child: ListTile(
-                        title: Text(
-                          task.title ?? '',
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    ),
+                    subtitle: Text(
+                      task.dateTime?.toString() ?? '',
+                      style: const TextStyle(color: Colors.grey),
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit, color: Colors.blue),
+                          onPressed: () async {
+                            final updatedTask = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddTaskPage(
+                                  onAddTask: (task) {
+                                    _updateTask(index, task);
+                                  },
+                                ),
+                              ),
+                            );
+
+                            if (updatedTask != null) {
+                              _updateTask(index, updatedTask);
+                            }
+                          },
                         ),
-                        subtitle: Text(
-                          task.dateTime?.toString() ?? '',
-                          style: const TextStyle(color: Colors.grey),
+                        IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => _deleteTask(index),
                         ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit, color: Colors.blue),
-                              onPressed: () {
-                                // Implement task update
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () => _deleteTask(index),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.cancel,
-                                  color: Colors.orange),
-                              onPressed: () => _cancelTask(index),
-                            ),
-                          ],
-                        ),
-                      ),
+                      ],
                     ),
                   ),
                 );
@@ -228,7 +235,9 @@ class _DetailPageState extends State<DetailPage> {
       leading: Padding(
         padding: const EdgeInsets.only(left: 16.0),
         child: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            Navigator.pop(context, tasks);
+          },
           icon: const Icon(Icons.arrow_back_ios),
           color: Colors.white,
           iconSize: 30,
@@ -260,7 +269,7 @@ class _DetailPageState extends State<DetailPage> {
             height: 5.0,
           ),
           Text(
-            'You have ${widget.task.left} tasks left today!',
+            'You have ${_getTasksLeft()} tasks left today!',
             style: const TextStyle(fontSize: 18, color: Colors.grey),
             maxLines: 2,
           ),

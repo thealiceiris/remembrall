@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 // import 'package:flutter/widgets.dart';
 import 'package:remembrall/models/task.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:remembrall/models/task_category.dart';
 import 'package:remembrall/screens/detail/detail.dart';
 
 // ignore: use_key_in_widget_constructors
 class Tasks extends StatelessWidget {
-  final taskList = Task.getTasks();
+  final taskList = TaskCategory.getTasks();
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +35,7 @@ class Tasks extends StatelessWidget {
         child: Text(
           '+ Add Task',
           style: TextStyle(
-              color: Colors.black,
-               fontSize: 18, 
-               fontWeight: FontWeight.bold),
+              color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
     );

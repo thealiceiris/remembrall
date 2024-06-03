@@ -2,7 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:remembrall/firebase_options.dart';
+import 'package:remembrall/screens/profile_screen.dart';
 import 'package:remembrall/screens/splashscreen.dart';
+// import 'package:remembrall/screens/profilescreen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,16 +16,21 @@ Future<void> main() async {
 
   // Initialize Awesome Notifications
   AwesomeNotifications().initialize(
-    'resource://drawable/res_app_icon',
+    'resource://drawable/nf_ic',
     [
       NotificationChannel(
         channelKey: 'basic_channel',
         channelName: 'Basic Notifications',
         channelDescription: 'Notification channel for basic tests',
-        defaultColor: Color(0xFF9D50DD),
+        defaultColor: const Color(0xFF9D50DD),
         ledColor: Colors.white,
+        playSound: true,
         importance: NotificationImportance.High,
         channelShowBadge: true,
+        enableLights: true,
+        enableVibration: true,
+        vibrationPattern: lowVibrationPattern,
+      
       )
     ],
     debug: true,
@@ -45,6 +52,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const SplashScreen(),
+      routes: {
+        '/profile': (context) =>
+            const ProfileScreen(), // Define the route to the ProfileScreen
+      },
     );
   }
 }

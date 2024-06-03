@@ -2,6 +2,7 @@
 // ignore_for_file: use_super_parameters
 
 import 'package:flutter/material.dart';
+import 'package:remembrall/screens/profile_screen.dart';
 import 'package:remembrall/widget/remembrall.dart';
 import 'package:remembrall/widget/tasks.dart';
 import 'package:remembrall/screens/rembot_screen.dart';
@@ -78,10 +79,19 @@ class TaskScreen extends StatelessWidget {
           ),
         ],
         onTap: (index) {
-          if (index == 1) {
+          if (index == 0) {
+            //handle the home tap
+          } else if (index == 1) {
+            //handle the RemBot tap
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const RemBotScreen()),
+            );
+          } else if (index == 2) {
+            //handle the profile tap
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
             );
           }
         },

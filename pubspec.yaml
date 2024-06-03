@@ -62,6 +62,9 @@ dependencies:
   # langchain: ^0.0.2
   # langchain_pinecone: ^0.0.1-dev.1
   awesome_notifications: ^0.9.3+1
+  image_picker: ^1.1.2
+  firebase_storage: ^11.7.7
+  logging: ^1.2.0
 
 dev_dependencies:
   flutter_test:
@@ -86,14 +89,14 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-flutter_icons:
-  android: true
-  ios: true
-  image_path: "assets/images/logo.png"
+# flutter_icons:
+#   android: true
+#   ios: true
+#   image_path: "assets/images/logo.png"
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - ./assets/images/td4.jpg
+    - assets/images/td4.jpg
 
     # - images/a_dot_ham.jpeg
 
