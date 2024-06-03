@@ -75,7 +75,7 @@ class PageOne extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Welcome to the Jeremy Buddies eHMS!',
+              'Welcome to Remembrall!',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: Colors.white,
@@ -108,7 +108,7 @@ class PageTwo extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Health and Monitoring',
+              'ADHD Management',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: Colors.white,
@@ -118,7 +118,7 @@ class PageTwo extends StatelessWidget {
             ]),
             const SizedBox(height: 16),
             const Text(
-              '💙',
+              '💜',
               style: TextStyle(fontSize: 48),
             ),
           ],
@@ -147,16 +147,16 @@ class PageThree extends StatelessWidget {
                       color: Colors.white,
                     ),
                 children: [
-                  const TextSpan(text: 'Visit our website for more'),
+                  const TextSpan(text: 'Visit here for more resources'),
                   TextSpan(
-                    text: 'Jeremy Buddies Dot Co Dot UK',
+                    text: 'Managing ADHD',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           color: Colors.lightBlueAccent,
                         ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         launchUrl(
-                          Uri.parse('https://jeremyscarebuddies.co.uk'),
+                          Uri.parse('https://www.helpguide.org/articles/add-adhd/managing-adult-adhd-attention-deficit-disorder.htm'),
                         );
                       },
                   ),
