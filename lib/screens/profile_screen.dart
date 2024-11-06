@@ -132,6 +132,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: TextStyle(color: Colors.black, fontSize: 18),
             ),
             CupertinoButton(
+              onPressed: _isLoading ? null : _updateProfile,
               child: _isLoading
                   ? const CircularProgressIndicator()
                   : const Text(
@@ -140,7 +141,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-              onPressed: _isLoading ? null : _updateProfile,
             ),
           ],
         ),
@@ -159,11 +159,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           const SizedBox(height: 4),
           CupertinoButton(
+            onPressed: _pickImage,
             child: const Text(
               'Upload Image',
               style: TextStyle(fontWeight: FontWeight.w500),
             ),
-            onPressed: _pickImage,
           ),
           const SizedBox(height: 48),
           ProfileInputField(

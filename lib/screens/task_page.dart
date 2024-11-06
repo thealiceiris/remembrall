@@ -140,7 +140,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   },
                   child: Text(
                     newTaskTime != null
-                        ? "${newTaskTime!.format(context)}"
+                        ? newTaskTime!.format(context)
                         : 'Select Time',
                     style: TextStyle(
                       color: newTaskTime != null ? Colors.black : Colors.grey,

@@ -6,7 +6,7 @@ import 'package:remembrall/screens/profile_screen.dart';
 import 'package:remembrall/widget/remembrall.dart';
 import 'package:remembrall/widget/tasks.dart';
 import 'package:remembrall/screens/rembot_screen.dart';
-import 'package:remembrall/screens/streak.dart'; // Make sure this path matches where you save the streak_widget.dart
+import 'package:remembrall/screens/streak.dart'; 
 
 class TaskScreen extends StatelessWidget {
   const TaskScreen({Key? key}) : super(key: key);

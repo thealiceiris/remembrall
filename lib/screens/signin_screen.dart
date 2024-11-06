@@ -8,7 +8,7 @@ import 'package:remembrall/themes/theme.dart';
 import 'package:remembrall/widget/custom_scaffold.dart';
 
 class SigninScreen extends StatefulWidget {
-  const SigninScreen({Key? key}) : super(key: key);
+  const SigninScreen({super.key});
 
   @override
   State<SigninScreen> createState() => _SigninScreenState();
